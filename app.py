@@ -10,67 +10,57 @@ st.set_page_config(
 
 # Encabezado principal
 st.header("🚗 Análisis exploratorio de anuncios de coches")
-st.write("Aplicación web creada con Streamlit para explorar anuncios de venta de vehículos.")
+st.write("Aplicación web interactiva creada con Streamlit para explorar anuncios de vehículos en EE. UU.")
 
 # Cargar datos
-@st.cache_data
-def load_data():
-    return pd.read_csv("vehicles_us.csv")
+car_data = pd.read_csv("vehicles_us.csv")
 
-car_data = load_data()
-
-# Vista previa del dataset
+# --- Vista previa del dataset ---
 st.subheader("Vista previa del dataset")
 st.dataframe(car_data.head())
 
-# Información general
+# --- Información general ---
 st.subheader("Información general del dataset")
 st.write(car_data.describe(include="all"))
 
 st.divider()
-st.subheader("📊 Visualizaciones interactivas")
 
-# =========================
-# Histograma del odómetro
-# =========================
-build_histogram = st.checkbox("Construir histograma del odómetro")
+# --- Checkbox: histograma del odómetro ---
+build_odometer_hist = st.checkbox("Construir histograma del odómetro")
 
-if build_histogram:
+if build_odometer_hist:
     st.write("Distribución del kilometraje de los vehículos")
-    fig_hist = px.histogram(
+    fig = px.histogram(
         car_data,
         x="odometer",
-        title="Distribución del odómetro"
+        nbins=100,
+        title="Distribución del kilometraje"
     )
-    st.plotly_chart(fig_hist, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)
 
-# =========================
-# Histograma de precios
-# =========================
+# --- Checkbox: histograma de precios ---
 build_price_hist = st.checkbox("Construir histograma de precios")
 
 if build_price_hist:
     st.write("Distribución de precios de los vehículos")
-    fig_price = px.histogram(
+    fig = px.histogram(
         car_data,
         x="price",
         nbins=50,
         title="Distribución de precios"
     )
-    st.plotly_chart(fig_price, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)
 
-# =========================
-# Gráfico de dispersión
-# =========================
+# --- Checkbox: scatter precio vs odómetro ---
 build_scatter = st.checkbox("Construir gráfico de dispersión precio vs odómetro")
 
 if build_scatter:
     st.write("Relación entre precio y kilometraje")
-    fig_scatter = px.scatter(
+    fig = px.scatter(
         car_data,
         x="odometer",
         y="price",
         opacity=0.4,
-        title="Precio vs odómetro"
+        title="Precio vs kilometraje"
     )
-    st.plotly_chart(fig_scatter, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)
