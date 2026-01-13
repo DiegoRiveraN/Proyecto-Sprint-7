@@ -1,47 +1,31 @@
-import streamlit as st
 import pandas as pd
 import plotly.express as px
+import streamlit as st
 
 st.set_page_config(page_title="Proyecto Sprint 7", layout="wide")
 
-st.title("🚗 Análisis exploratorio de datos")
-st.write("Aplicación web creada con Streamlit")
+st.header("🚗 Análisis exploratorio de anuncios de coches")
 
 # Cargar datos
-@st.cache_data
-def load_data():
-    return pd.read_csv("vehicles_us.csv")
+car_data = pd.read_csv("vehicles_us.csv")
 
-df = load_data()
+# Checkbox: histograma
+build_histogram = st.checkbox("Construir histograma del odómetro")
 
-# Mostrar dataset
-st.subheader("Vista previa del dataset")
-st.dataframe(df.head())
+if build_histogram:
+    st.write("Distribución del kilometraje de los vehículos")
+    fig = px.histogram(car_data, x="odometer")
+    st.plotly_chart(fig, use_container_width=True)
 
-# Información general
-st.subheader("Información general del dataset")
-st.write(df.describe(include="all"))
+# Checkbox: dispersión
+build_scatter = st.checkbox("Construir gráfico de dispersión precio vs odómetro")
 
-# Gráfico simple
-st.subheader("Distribución de precios de vehículos")
-fig = px.histogram(
-    df,
-    x="price",
-    nbins=50,
-    title="Distribución de precios"
-)
-st.plotly_chart(fig, use_container_width=True)
-
-import pandas as pd
-import streamlit as st
-
-st.title("🚗 Análisis exploratorio de datos")
-st.write("Aplicación web creada con Streamlit")
-
-df = pd.read_csv("vehicles_us.csv")
-
-st.subheader("Vista previa del dataset")
-st.dataframe(df.head())
-
-st.subheader("Información general del dataset")
-st.write(df.describe(include="all"))
+if build_scatter:
+    st.write("Relación entre precio y kilometraje")
+    fig = px.scatter(
+        car_data,
+        x="odometer",
+        y="price",
+        opacity=0.4
+    )
+    st.plotly_chart(fig, use_container_width=True)
