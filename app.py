@@ -32,3 +32,16 @@ fig = px.histogram(
 )
 st.plotly_chart(fig, use_container_width=True)
 
+import pandas as pd
+import streamlit as st
+
+st.title("🚗 Análisis exploratorio de datos")
+st.write("Aplicación web creada con Streamlit")
+
+df = pd.read_csv("vehicles_us.csv")
+
+st.subheader("Vista previa del dataset")
+st.dataframe(df.head())
+
+st.subheader("Información general del dataset")
+st.write(df.describe(include="all"))
