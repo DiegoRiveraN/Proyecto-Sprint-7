@@ -7,5 +7,28 @@ st.set_page_config(page_title="Proyecto Sprint 7", layout="wide")
 st.title("🚗 Análisis exploratorio de datos")
 st.write("Aplicación web creada con Streamlit")
 
-# Placeholder de datos
-st.info("Aquí cargaremos y analizaremos el dataset en el siguiente paso.")
+# Cargar datos
+@st.cache_data
+def load_data():
+    return pd.read_csv("vehicles_us.csv")
+
+df = load_data()
+
+# Mostrar dataset
+st.subheader("Vista previa del dataset")
+st.dataframe(df.head())
+
+# Información general
+st.subheader("Información general del dataset")
+st.write(df.describe(include="all"))
+
+# Gráfico simple
+st.subheader("Distribución de precios de vehículos")
+fig = px.histogram(
+    df,
+    x="price",
+    nbins=50,
+    title="Distribución de precios"
+)
+st.plotly_chart(fig, use_container_width=True)
+
